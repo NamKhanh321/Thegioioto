@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-slide-in-right: slide-in-right 0.5s both;
+  --animate-slide-in-left: slide-in-left 0.5s both;
+
+  @keyframes slide-in-right {
+    0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes slide-in-left {
+    0% {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+@layer components {
+  input {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+    border-radius: 0.25rem;
+  }
+  button {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+    border-radius: 0.25rem;
+  }
+}
