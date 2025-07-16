@@ -2,36 +2,54 @@
 
 import Image from "next/image";
 import { useState } from 'react';
-import { useAuth } from "@/app/contexts/AuthContext";
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function LoginForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
-    
-    const {login, isLoading} = useAuth();
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get('from') || '/';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+        setLoading(true);
 
         if (!username || !password) {
             setError("Vui lòng nhập đủ tài khoản và mật khẩu");
+            setLoading(false);
             return;
         }
 
         try {
             // This fetch call runs in the browser
-            await login(username, password);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+                // THIS IS THE MAGIC: Tells the browser to send/receive cookies
+                credentials: 'include',
+            });
 
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-            setError(err.message);
-        } else {
-            setError("Đã xảy ra lỗi không xác định");
+            if (!response.ok) {
+                const errorData = await response.json();
+                setError(errorData.msg || "Đăng nhập thất bại, vui lòng kiểm tra lại thông tin");
+                return;
+            }
+
+            router.push(redirectTo); // Chuyển hướng người dùng (router dùng cho client components)
+        } catch (err) {
+            console.error('Login error:', err);
+            setError("An unexpected error occurred. Please try again.");
+        } finally {
+            setLoading(false);
         }
-    }
-    }
+    };
 
     return (
         <form
@@ -68,9 +86,9 @@ export default function LoginForm() {
             <button
                 type="submit"
                 className="w-full max-w-30 self-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 shadow hover:from-blue-600 hover:to-blue-800 transition"
-                disabled={isLoading} // Disable button trong lúc chờ xử lý
+                disabled={loading} // Disable button trong lúc chờ xử lý
             >
-                {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </button>
 
             {error && (

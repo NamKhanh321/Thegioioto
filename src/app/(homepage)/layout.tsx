@@ -18,7 +18,7 @@ export default function HomePageLayout({
             </div>
         </div>
         <div className="text-center sticky top-0 z-20 bg-white">
-            <nav className="mt-5 mb-5">
+            <nav className="mt-5 mb-5 sm:text-xl">
             <ul className="list-none m-0 p-0 flex items-center justify-center gap-5 flex-wrap">
                 <li className="relative group">
                   <Link href="/" className="transition-colors duration-200 hover:text-blue-600">
