@@ -9,6 +9,7 @@ config.autoAddCss = false
 import Header from '@/components/Header';
 
 import { AuthProvider } from "./contexts/AuthContext";
+import {Suspense} from 'react';
 // import Footer from '@/components/Footer';
 
 const geistSans = Geist({
@@ -37,10 +38,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-200`}
       >
         <div className="flex flex-col min-h-screen mx-auto bg-white text-sm">
+          <Suspense fallback={<div>Loading content...</div>}>
             <AuthProvider>
               <Header />
               {children}
             </AuthProvider>
+          </Suspense>
         </div>
       </body>
     </html>
