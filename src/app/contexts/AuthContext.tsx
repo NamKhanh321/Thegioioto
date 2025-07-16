@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import { createContext, useState, useContext, useEffect, ReactNode, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 type User = {
@@ -89,9 +89,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
+    <Suspense fallback={<div>Loading content...</div>}>
     <AuthContext.Provider value={{ user, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
+    </Suspense>
   );
 }
 
