@@ -32,7 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // ... (same as before, fetches user from /api/auth/me)
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/me`, {credentials: 'include'});
+        // const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/me`, {credentials: 'include'});
+        const res = await fetch('/api/me'); // <-- CHANGE THIS
         if (res.ok) {
           const data = await res.json();
           setUser(data);
@@ -53,7 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (username: string, password: string) => {
     // 1. Make a request to your Express backend
     setIsLoading(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/login`, {
+    // const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/login`, {
+            const response = await fetch('/api/login', { // <-- CHANGE THIS
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -80,7 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // ✅ The Logout Logic
   const logout = async () => {
     // 1. Tell the backend to clear the httpOnly cookie
-    await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+    // await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+    await fetch('/api/logout', { method: 'POST' }); // <-- CHANGE THIS
 
     // 2. Clear the user state in the app
     setUser(null);
