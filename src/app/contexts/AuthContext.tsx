@@ -71,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(data);
       // 3. Redirect to the dashboard
       router.push(redirectTo);
+      window.location.reload();
       setIsLoading(false);
     } else {
       // Handle login errors (e.g., show a toast notification)
