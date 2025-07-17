@@ -32,19 +32,27 @@ export default function Header()
             <li className="transition-transform duration-200 hover:scale-110">
                 <Link href= '/'>Home</Link>
             </li>
-            {mounted && !isLoading && (user ?             
-                (<><li className="transition-transform duration-200 hover:scale-110">
-                    <Link href= '/dashboard'>Trang quản trị</Link>
-                    </li>
-                    <li className="transition-transform duration-200 hover:scale-110">
-                        <button onClick={handleLogout} className="text-inherit no-underline hover:underline cursor-pointer bg-transparent border-none p-0 font-inherit">
-                            ⎆Đăng Xuất
-                        </button>
-                    </li></>) :
-                (<li className="transition-transform duration-200 hover:scale-110">
-                        <Link href="/login">⎆Đăng nhập</Link>
-                </li>))
-            }
-        </ul>
+            {!mounted || isLoading ? (
+    // Optionally, show a skeleton or nothing while loading
+    <li className="text-gray-400 animate-pulse">...</li>
+  ) : user ? (
+    <>
+      {user.role === "admin" && (
+        <li className="transition-transform duration-200 hover:scale-110">
+          <Link href="/dashboard">Trang quản trị</Link>
+        </li>
+      )}
+      <li className="transition-transform duration-200 hover:scale-110">
+        <button onClick={handleLogout} className="text-inherit no-underline hover:underline cursor-pointer bg-transparent border-none p-0 font-inherit">
+          ⎆Đăng Xuất
+        </button>
+      </li>
+    </>
+  ) : (
+    <li className="transition-transform duration-200 hover:scale-110">
+      <Link href="/login">⎆Đăng nhập</Link>
+    </li>
+  )}
+</ul>
     </div>);
 }

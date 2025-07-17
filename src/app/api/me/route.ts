@@ -23,7 +23,6 @@ export async function GET(req: NextRequest) {
         'Cookie': `access_token=${accessToken}`,
       },
     });
-
     const backendData = await backendRes.json();
 
     // if (backendRes.ok) {
