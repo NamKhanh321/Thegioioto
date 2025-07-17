@@ -7,6 +7,7 @@ const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get('access_token')?.value;
   const { pathname } = req.nextUrl;
+  console.log(token);
 
   const isProtectedRoute = pathname === '/introduce' || pathname === '/posts';
   const isAuthRoute = pathname === '/login' || pathname === '/register';
