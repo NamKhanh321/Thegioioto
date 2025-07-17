@@ -23,7 +23,7 @@ export default function ClientSidebar() {
   return (
     <>
       {/* Toggle Button for Small Screens */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
+      <div className="lg:hidden fixed top-10 left-1 z-50">
         <button
           onClick={toggleSidebar}
           className="p-2 rounded-full bg-gray-700 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
