@@ -93,8 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(data);
       // 3. Chuyển hướng 
       // window.location.href = redirectTo;
-      router.push(redirectTo);
       router.refresh();
+      router.push(redirectTo);
       setIsLoading(false);
     } else {
       // Xử lý lỗi login
@@ -112,8 +112,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (response.ok) {
     setUser(null);
     // window.location.href = '/login';
-    router.push('/login');
     router.refresh();
+    router.push('/login');
     setIsLoading(false);
     }
     else {
