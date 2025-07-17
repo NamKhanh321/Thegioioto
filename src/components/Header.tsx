@@ -3,16 +3,16 @@ import Link from "next/link"
 import Image from "next/image"
 
 import { useAuth } from "@/app/contexts/AuthContext";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 export default function Header()
 {
     const { user, isLoading, logout } = useAuth();
 
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    // const [mounted, setMounted] = useState(false);
+    // useEffect(() => {
+    //     setMounted(true);
+    // }, []);
 
     const handleLogout = async () => {
         await logout();
@@ -25,14 +25,14 @@ export default function Header()
             width={30}
             height={30}
             className="rounded-full"
-            priority
             />
         </Link>
         <ul className="flex items-center gap-2 sm:gap-5 sm:text-xl">
             <li className="transition-transform duration-200 hover:scale-110">
                 <Link href= '/'>Home</Link>
             </li>
-            {!mounted || isLoading ? (
+            {/* {!mounted ||  */}
+            {isLoading ? (
     // Optionally, show a skeleton or nothing while loading
     <li className="text-gray-400 animate-pulse">...</li>
   ) : user ? (

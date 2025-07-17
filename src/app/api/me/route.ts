@@ -32,8 +32,9 @@ export async function GET(req: NextRequest) {
     // else {
     //   return NextResponse.json(backendData, { status: backendRes.status });
     // }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error('Error in /api/auth/me proxy:', error);
+    // console.error('Error in /api/auth/me proxy:', error);
     return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });
   }
 }
