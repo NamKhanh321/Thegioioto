@@ -16,6 +16,7 @@
     "@types/cookie": "^0.6.0",
     "cookie": "^1.0.2",
     "jose": "^6.0.12",
+    "lucide-react": "^0.525.0",
     "next": "15.3.3",
     "postcss": "^8.5.6",
     "react": "^19.0.0",
