@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ username, password }),
-                credentials: 'include',
+                // credentials: 'include',
             });
 
     const data = await response.json();
