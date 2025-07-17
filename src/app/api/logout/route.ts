@@ -22,8 +22,15 @@ export async function POST(req: NextRequest) {
 
     // 3. Delete the 'access_token' cookie from the client's browser
     // NextResponse.cookies.delete() is the preferred way in App Router
-    response.cookies.delete('access_token');
 
+    // response.cookies.delete('access_token');
+    response.cookies.set('access_token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      sameSite: 'lax',
+      expires: new Date(0),
+    });
     // If you need more specific control over deletion options (e.g., path, sameSite):
     // response.cookies.set('access_token', '', {
     //   httpOnly: true,
