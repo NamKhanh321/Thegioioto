@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 import { usePathname } from 'next/navigation';
 
@@ -26,7 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+  // const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('from') || '/';
@@ -92,8 +92,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // 2. update user nếu login thành công
       setUser(data);
       // 3. Chuyển hướng 
-      // window.location.href = redirectTo;
-      router.push(redirectTo);
+      window.location.href = redirectTo;
+      // router.push(redirectTo);
       setIsLoading(false);
     } else {
       // Xử lý lỗi login
@@ -110,8 +110,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (response.ok) {
     setUser(null);
-    // window.location.href = '/login';
-    router.push('/login');
+    window.location.href = '/login';
+    // router.push('/login');
     setIsLoading(false);
     }
     else {
@@ -119,6 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
       throw new Error('Không thể đăng xuất');
     }
+    
   };
 
   return (
