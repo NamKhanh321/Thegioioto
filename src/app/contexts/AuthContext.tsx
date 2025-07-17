@@ -94,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // 3. Chuyển hướng 
       // window.location.href = redirectTo;
       router.push(redirectTo);
+      router.refresh();
       setIsLoading(false);
     } else {
       // Xử lý lỗi login
@@ -112,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     // window.location.href = '/login';
     router.push('/login');
+    router.refresh();
     setIsLoading(false);
     }
     else {
