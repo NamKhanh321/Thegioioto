@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get('access_token')?.value;
   const { pathname } = req.nextUrl;
 
-  const isProtectedRoute = pathname === '/introduce' || pathname === '/posts';
+  const isProtectedRoute = pathname === '/introduce';
   // const isCustomerRoute = pathname === '/shopping' || pathname === '/category' || pathname === '/service';
   const isAdminRoute = pathname.startsWith('/dashboard');
   console.log(isAdminRoute);
@@ -60,8 +60,7 @@ export async function middleware(req: NextRequest) {
 
 // thêm các route cần bảo vệ tại đây
 export const config = {
-  matcher: ['/introduce', 
-    '/posts',
+  matcher: ['/introduce',
     '/login',
     '/register',
     '/dashboard/:path*'
