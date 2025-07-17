@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
           // 'Lax' is generally safe for same-site (Vercel app domain)
           // 'None' is for cross-site, but here the cookie is set by the same domain as the app
           sameSite: 'lax',
-          maxAge: 10, // Tính theo giây
+          maxAge: 3600, // Tính theo giây
         });
       }
 
