@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 type User = {
   id: string;
@@ -23,7 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+  // const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('from') || '/';
 
@@ -70,8 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // 2. If login is successful, update the user state
       setUser(data);
       // 3. Redirect to the dashboard
-      window.location.reload();
-      router.push(redirectTo);
+      window.location.href = redirectTo;
+      // router.push(redirectTo);
       setIsLoading(false);
     } else {
       // Handle login errors (e.g., show a toast notification)
@@ -89,8 +89,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // 2. Clear the user state in the app
     setUser(null);
     // 3. Redirect to the login page
-    window.location.reload();
-    router.push('/login');
+    window.location.href = '/login';
+    // router.push('/login');
   };
 
   return (
