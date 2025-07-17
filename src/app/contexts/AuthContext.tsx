@@ -70,8 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // 2. If login is successful, update the user state
       setUser(data);
       // 3. Redirect to the dashboard
-      router.push(redirectTo);
       window.location.reload();
+      router.push(redirectTo);
       setIsLoading(false);
     } else {
       // Handle login errors (e.g., show a toast notification)
@@ -89,8 +89,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // 2. Clear the user state in the app
     setUser(null);
     // 3. Redirect to the login page
-    router.push('/login');
     window.location.reload();
+    router.push('/login');
   };
 
   return (
