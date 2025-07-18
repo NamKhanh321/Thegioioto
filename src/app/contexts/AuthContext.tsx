@@ -18,6 +18,7 @@ type AuthContextType = {
   isLoading: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  fetchUser: () => Promise<void>; // New function to re-check auth status
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,24 +33,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const redirectTo = searchParams.get('from') || '/';
 
   // Thử trích xuất user từ cookies hiện tại
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        // const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/me`, {credentials: 'include'});
-        const res = await fetch('/api/me'); // <-- CHANGE THIS
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-        } else {
-          setUser(null);
-        }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
+  const fetchUser = async () => {
+    try {
+      // const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/auth/me`, {credentials: 'include'});
+      const res = await fetch('/api/me'); // <-- CHANGE THIS
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+      } else {
         setUser(null);
-      } finally {
-        setIsLoading(false);
       }
-    };
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+        setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+    
+  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -125,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, fetchUser, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
