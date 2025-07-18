@@ -1,15 +1,18 @@
 "use client"
 import { useAuth } from "@/app/contexts/AuthContext";
-import { useEffect } from "react";
 
 export default function ShoppingPage() {
-  const {fetchUser} = useAuth();
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+  const { user } = useAuth();
+
+  if (!user) {
+    return <div>Bạn cần đăng nhập để xem trang này.</div>;
+  }
+
   return (
-    <div className="text-center text-5xl">
-        <h1 className="text-amber-600">Trang mua hàng</h1>
-      </div>
+    <div>
+      <h1>Chào mừng, {user.username}!</h1>
+      {/* Display user data */}
+      {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
+    </div>
   );
 }

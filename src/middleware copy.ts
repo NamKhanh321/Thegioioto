@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
   if (!token && (isCustomerRoute || isAdminRoute)) {
     const loginUrl = new URL('/login', req.url);
     loginUrl.searchParams.set('from', pathname); // Thêm param để chuyển hướng lại về trang người dùng muốn truy cập khi chưa có token hợp lệ (sử dụng ở login-form)
-    return NextResponse.redirect(loginUrl, { status: 308 });
+    return NextResponse.redirect(loginUrl, {status: 303});
   }
 
   if (token) {
