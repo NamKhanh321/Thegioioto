@@ -2,6 +2,8 @@
 // No 'use client' directive means it runs on the server.
 
 import React from 'react';
+const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
+
 
 // Assuming you have a types file for your User
 type User = {
@@ -20,13 +22,13 @@ export default async function AccountPage() {
   try {
     // Fetch data from your Express API
     // Ensure process.env.NEXT_PUBLIC_API_ENDPOINT is correctly set in your .env file
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/users`, {
+    const response = await fetch(`${RENDER_BACKEND_URL}/api/users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    // console.log(await response.json());
+    console.log(`${RENDER_BACKEND_URL}/api/users`);
 
     if (!response.ok) {
       // If the response is not OK, throw an error to be caught by the catch block
