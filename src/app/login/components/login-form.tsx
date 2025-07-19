@@ -1,6 +1,8 @@
 'use client';
 
 import Image from "next/image";
+import Link from "next/link"
+
 import { useState } from 'react';
 import { useAuth } from "@/app/contexts/AuthContext";
 
@@ -36,7 +38,7 @@ export default function LoginForm() {
     return (
         <form
             onSubmit={handleSubmit}
-            className="flex flex-col max-w-xs mx-auto mt-8 p-4 bg-blue-200 rounded shadow"
+            className="flex flex-col w-xs mx-auto mt-8 p-4 bg-gray-600 text-white sm:text-lg rounded shadow"
         >
             <Image src="/logo-thegioioto.png" alt="login logo" width={200} height={200} className="self-center"></Image>
             <div className="gap-3 mb-4">
@@ -46,7 +48,7 @@ export default function LoginForm() {
                         type="text"
                         name="username"
                         id="username"
-                        className="border border-gray-300 rounded p-2 focus:outline-none focus:border-blue-400"
+                        className="border border-gray-300 rounded p-1 focus:outline-none focus:border-blue-400"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
@@ -58,7 +60,7 @@ export default function LoginForm() {
                         type="password"
                         name="password"
                         id="password"
-                        className="border border-gray-300 rounded p-2 focus:outline-none focus:border-blue-400"
+                        className="border border-gray-300 rounded p-1 focus:outline-none focus:border-blue-400"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -72,7 +74,7 @@ export default function LoginForm() {
             >
                 {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </button>
-
+            <div className="mt-4">Chưa có tài khoản? <Link href="/register" className="text-blue-500 hover:text-blue-700 transition-colors duration-200">Đăng ký ngay</Link></div>
             {error && (
                 <p className="text-red-600 text-center mt-2">{error}</p>
             )}
