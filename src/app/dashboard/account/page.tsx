@@ -2,6 +2,7 @@
 // No 'use client' directive means it runs on the server.
 
 import React from 'react';
+import UserActions from '@/app/dashboard/account/components/user-actions';
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 
@@ -28,7 +29,7 @@ export default async function AccountPage() {
         'Content-Type': 'application/json',
       },
     });
-    console.log(`${RENDER_BACKEND_URL}/api/users`);
+
 
     if (!response.ok) {
       // If the response is not OK, throw an error to be caught by the catch block
@@ -62,6 +63,7 @@ export default async function AccountPage() {
     { key: 'role', label: 'Vai trò' },
     { key: 'createdAt', label: 'Ngày tạo' },
     { key: 'updatedAt', label: 'Cập nhật cuối' },
+    { key: 'actions', label: 'Hành động'}
     // Add more columns as needed
   ];
 
@@ -102,9 +104,10 @@ export default async function AccountPage() {
                       className="py-3 px-4 text-sm text-gray-700 border-b border-gray-200"
                     >
                       {/* Special handling for date fields if needed */}
-                      {['createdAt', 'updatedAt'].includes(col.key)
+                      {col.key === 'actions' ? (<UserActions user={user}/>) :
+                      (['createdAt', 'updatedAt'].includes(col.key)
                         ? new Date(user[col.key as keyof User] as string).toLocaleDateString('vi-VN') // Assert keyof User and string for date
-                        : user[col.key as keyof User]} {/* Safely access property using keyof User */}
+                        : user[col.key as keyof User])} {/* Safely access property using keyof User */}
                     </td>
                   ))}
                 </tr>

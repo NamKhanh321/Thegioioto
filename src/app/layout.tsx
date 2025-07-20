@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from 'react-hot-toast'; // Import the Toaster
+
 import "./globals.css";
 
 import { config } from '@fortawesome/fontawesome-svg-core'
@@ -44,6 +46,38 @@ export default function RootLayout({
               {children}
             </AuthProvider>
           </Suspense>
+          <Toaster
+          position="top-center" // You can choose 'top-right', 'bottom-center', etc.
+          reverseOrder={false}
+          toastOptions={{
+            // Default options for all toasts
+            duration: 2000, // How long toasts are visible (2 seconds)
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+            success: {
+              style: {
+                background: '#22C55E', // Green-500
+                color: '#fff',
+              },
+              iconTheme: {
+                primary: '#fff',
+                secondary: '#22C55E',
+              },
+            },
+            error: {
+              style: {
+                background: '#EF4444', // Red-500
+                color: '#fff',
+              },
+              iconTheme: {
+                primary: '#fff',
+                secondary: '#EF4444',
+              },
+            },
+          }}
+        />
         </div>
       </body>
     </html>
