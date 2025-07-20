@@ -55,8 +55,11 @@ export default function UserActions({ user }: UserActionsProps) {
     if (!isDeleting) { // Only react when the action has finished
       if (deleteState.error) {
         toast.error(`Lỗi xóa: ${deleteState.error}`);
-        setShowDeleteConfirmModal(false); // Close modal even on error for delete
       }
+      else {
+        toast.success(`Xóa tài khoản thành công!`);
+      }
+      setShowDeleteConfirmModal(false); // Close modal even on error for delete
     }
   }, [deleteState, isDeleting]); // Depend on the entire deleteState object and its pending status
 
