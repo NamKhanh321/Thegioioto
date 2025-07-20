@@ -28,6 +28,7 @@ export default async function AccountPage() {
       headers: {
         'Content-Type': 'application/json',
       },
+      cache: 'no-store',
     });
 
 
