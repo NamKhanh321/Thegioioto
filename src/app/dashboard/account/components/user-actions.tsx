@@ -56,9 +56,9 @@ export default function UserActions({ user }: UserActionsProps) {
       if (deleteState.error) {
         toast.error(`Lỗi xóa: ${deleteState.error}`);
       }
-      else {
-        toast.success(`Xóa tài khoản thành công!`);
-      }
+      // else {
+      //   toast.success(`Xóa tài khoản thành công!`);
+      // }
       setShowDeleteConfirmModal(false); // Close modal even on error for delete
     }
   }, [deleteState, isDeleting]); // Depend on the entire deleteState object and its pending status
