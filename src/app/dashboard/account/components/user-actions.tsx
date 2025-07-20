@@ -26,6 +26,7 @@ export default function UserActions({ user }: UserActionsProps) {
   // State for the delete action
   const [deleteState, deleteAction, isDeleting] = useActionState(deleteUser, {
     error: "",
+    success: false,
   });
 
   // State for the update action
@@ -51,15 +52,15 @@ export default function UserActions({ user }: UserActionsProps) {
   // Effect to handle delete error (success is handled by revalidatePath)
   useEffect(() => {
     // This effect should run when the delete action completes (isDeleting becomes false)
-    // and then check the state for error.
     if (!isDeleting) { // Only react when the action has finished
-      if (deleteState.error) {
-        toast.error(`Lỗi xóa: ${deleteState.error}`);
+      if (deleteState.success) {
+        // toast.success('Xóa tài khoản thành công!');
+        setShowDeleteConfirmModal(false); // Close modal even on error for delete
       }
-      // else {
-      //   toast.success(`Xóa tài khoản thành công!`);
-      // }
-      setShowDeleteConfirmModal(false); // Close modal even on error for delete
+      else if (deleteState.error) {
+        toast.error(`Lỗi xóa: ${deleteState.error}`);
+        setShowDeleteConfirmModal(false); // Close modal even on error for delete
+      }
     }
   }, [deleteState, isDeleting]); // Depend on the entire deleteState object and its pending status
 
@@ -205,7 +206,7 @@ export default function UserActions({ user }: UserActionsProps) {
       {/* Delete Button */}
       <button
         onClick={() => setShowDeleteConfirmModal(true)}
-        className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 flex items-center gap-1"
+        className="p-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center gap-1"
       >
         <Trash2 size={16} /> Xóa
       </button>

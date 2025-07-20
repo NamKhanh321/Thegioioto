@@ -30,7 +30,6 @@ export async function registerUser(previousState: RegisterFormState, formData : 
     if(!response.ok)
     {
         const data = await response.json();
-        console.log(data);
         return {
             error: data.msg,
             username,
@@ -46,7 +45,8 @@ import { cookies } from 'next/headers'; // To access cookies for authentication
 
 // Define the type for the state that the server action returns (optional for delete, but good practice)
 type DeleteFormState = {
-  error?: string;
+  error?: string,
+  success?: boolean,
 };
 
 export async function deleteUser(previousState: DeleteFormState, formData: FormData): Promise<DeleteFormState> {
@@ -60,33 +60,28 @@ export async function deleteUser(previousState: DeleteFormState, formData: FormD
     const cookieStore = cookies();
     const authToken = (await cookieStore).get('auth_token')?.value; // Get your auth token from cookies
 
-
     const response = await fetch(`${RENDER_BACKEND_URL}/api/users/${userId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `auth_token:${authToken}`,
+        'Cookie': `auth_token=${authToken}`,
       },
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to delete user.');
+      throw new Error(errorData.msg || 'Không thể xóa người dùng');
     }
 
     // Revalidate the path to refresh the user list after successful deletion
     // This tells Next.js to refetch data for the /dashboard/account route on the next request
     revalidatePath('/dashboard/account');
+    return { success: true, error: undefined }; // Return an empty object for success
 
-    // Optionally redirect if needed, but revalidatePath is usually enough for list updates
-    // redirect('/dashboard/account');
-
-    return {}; // Return an empty object for success
   } catch (error: unknown) {
-    console.error('Error deleting user:', error);
     if(error instanceof Error)
-    return { error: error.message };
-    return {error: 'Đã xảy ra lỗi khi xóa người dùng.'};
+      return { error: error.message , success: false};
+    return {error: 'Đã xảy ra lỗi khi xóa người dùng.', success: false};
   }
 }
 
@@ -132,14 +127,14 @@ export async function updateUser(previousState: UpdateFormState, formData: FormD
       method: 'PATCH', // Or 'PUT' depending on your API design
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `auth_token:${authToken}`,
+        'Cookie': `auth_token=${authToken}`,
       },
       body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to update user.');
+      throw new Error(errorData.msg || 'Không thể cập nhật người dùng');
     }
 
     // Revalidate the path to refresh the user list after successful update
@@ -147,9 +142,70 @@ export async function updateUser(previousState: UpdateFormState, formData: FormD
 
     return { success: true }; // Indicate success
   } catch (error: unknown) {
-    console.error('Error updating user:', error);
     if(error instanceof Error)
-      return { error: error.message};
-    return {error: 'Đã xảy ra lỗi khi cập nhật người dùng.' };
+      return { error: error.message, success: false};
+    return {error: 'Đã xảy ra lỗi khi cập nhật người dùng.' , success: false};
+  }
+}
+
+type CreateFormState = {
+  error?: string | null;
+  success?: boolean | null;
+  username?: string | null;
+  password?: string | null;
+  name?: string | null;
+  role?: string | null;
+};
+export async function createUser(previousState: CreateFormState, formData: FormData): Promise<CreateFormState> {
+  const username = formData.get('username') as string;
+  const password = formData.get('password') as string;
+  const name = formData.get('name') as string;
+  const role = formData.get('role') as string;
+  // Note: Password update should ideally be a separate action for security
+  // or handled very carefully here (e.g., only if password field is explicitly provided and hashed)
+
+  // Basic validation (enhance as needed)
+  if (!name || name.trim() === '') {
+    return { error: 'Tên không được để trống.', username, password, name, role };
+  }
+  const allowedRoles = ['admin', 'customer', 'staff']; // Match your Mongoose schema
+  if (!role || !allowedRoles.includes(role)) {
+    return { error: `Vai trò không hợp lệ. Chỉ chấp nhận: ${allowedRoles.join(', ')}.` , username, password, name, role};
+  }
+
+  const payload = {
+    name: name.trim(),
+    role: role,
+    username: username,
+    password: password,
+    // Add other fields you want to update
+  };
+
+  try {
+    const cookieStore = cookies();
+    const authToken = (await cookieStore).get('auth_token')?.value;
+
+    const response = await fetch(`${RENDER_BACKEND_URL}/api/users`, {
+      method: 'POST', // Or 'PUT' depending on your API design
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `auth_token=${authToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.msg || 'Có lỗi xảy ra! Không thể tạo tài khoản');
+    }
+
+    // Revalidate the path to refresh the user list after successful update
+    revalidatePath('/dashboard/account');
+
+    return { success: true}; // Indicate success
+  } catch (error: unknown) {
+    if(error instanceof Error)
+      return { error: error.message, success: false, username, password, name, role};
+    return {error: 'Đã xảy ra lỗi khi tạo người dùng.', success: false, username, password, name, role};
   }
 }

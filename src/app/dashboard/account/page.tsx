@@ -3,6 +3,7 @@
 
 import React from 'react';
 import UserActions from '@/app/dashboard/account/components/user-actions';
+import CreateUserButton from './components/add-btn';
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 
@@ -42,7 +43,6 @@ export default async function AccountPage() {
     // users = data.users; // Assuming your API returns { users: [...] }
     users = await response.json();
   } catch (err: unknown) {
-    console.error("Error fetching users:", err);
     if(err instanceof Error)
       error = err.message;
     else
@@ -78,6 +78,7 @@ export default async function AccountPage() {
           <span className="block sm:inline"> {error}</span>
         </div>
       )}
+      <CreateUserButton />
 
       {!users || users.length === 0 ? (
         <p className="text-center text-gray-600">Không có dữ liệu người dùng nào.</p>
