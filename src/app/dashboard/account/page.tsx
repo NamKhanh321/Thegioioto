@@ -2,8 +2,10 @@
 // No 'use client' directive means it runs on the server.
 
 import React from 'react';
-import UserActions from '@/app/dashboard/account/components/user-actions';
+import UserActions from '@/app/dashboard/account/components/updateAndDelete';
 import CreateUserButton from './components/add-btn';
+import { cookies } from 'next/headers';
+import UserCard from '@/components/Card';
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 
@@ -24,10 +26,13 @@ export default async function AccountPage() {
   try {
     // Fetch data from your Express API
     // Ensure process.env.NEXT_PUBLIC_API_ENDPOINT is correctly set in your .env file
+    const cookieStore = cookies();
+    const accessToken = (await cookieStore).get('access_token')?.value; // Get your auth token from cookies
     const response = await fetch(`${RENDER_BACKEND_URL}/api/users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Cookie': `access_token=${accessToken}`,
       },
       cache: 'no-store',
     });
@@ -67,6 +72,9 @@ export default async function AccountPage() {
     { key: 'actions', label: 'Hành động'}
     // Add more columns as needed
   ];
+  const cardDisplayFields = columns
+    .filter(col => col.key !== 'actions')
+    .map(col => ({ key: col.key as string, label: col.label }));
 
   return (
     <div className="p-4">
@@ -82,8 +90,8 @@ export default async function AccountPage() {
 
       {!users || users.length === 0 ? (
         <p className="text-center text-gray-600">Không có dữ liệu người dùng nào.</p>
-      ) : (
-        <div className="overflow-x-auto rounded-lg shadow-md">
+      ) : (<>
+        <div className="hidden sm:block overflow-x-auto rounded-lg shadow-md">
           <table className="min-w-full bg-white border-collapse">
             <thead className="bg-gray-200">
               <tr>
@@ -117,6 +125,21 @@ export default async function AccountPage() {
             </tbody>
           </table>
         </div>
+
+        <div className="sm:hidden grid grid-cols-1 gap-4">
+            {users.map((user) => (
+              <UserCard
+                key={user._id}
+                title={user.name || `Người dùng ID: ${user._id}`} // Use user's name as card title
+                data={user}
+                displayFields={cardDisplayFields} // Pass the filtered columns for display
+              >
+                {/* Pass the UserActions component as children to the Card */}
+                <UserActions user={user} />
+              </UserCard>
+            ))}
+          </div>
+          </>
       )}
     </div>
   );

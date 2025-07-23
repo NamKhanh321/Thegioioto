@@ -58,13 +58,13 @@ export async function deleteUser(previousState: DeleteFormState, formData: FormD
 
   try {
     const cookieStore = cookies();
-    const authToken = (await cookieStore).get('auth_token')?.value; // Get your auth token from cookies
+    const accessToken = (await cookieStore).get('access_token')?.value; // Get your auth token from cookies
 
     const response = await fetch(`${RENDER_BACKEND_URL}/api/users/${userId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `auth_token=${authToken}`,
+        'Cookie': `access_token=${accessToken}`,
       },
     });
 
@@ -101,7 +101,7 @@ export async function updateUser(previousState: UpdateFormState, formData: FormD
   // or handled very carefully here (e.g., only if password field is explicitly provided and hashed)
 
   if (!userId) {
-    return { error: 'User ID is missing for update.' };
+    return { error: 'Phải có id người dùng' };
   }
 
   // Basic validation (enhance as needed)
@@ -121,13 +121,13 @@ export async function updateUser(previousState: UpdateFormState, formData: FormD
 
   try {
     const cookieStore = cookies();
-    const authToken = (await cookieStore).get('auth_token')?.value;
+    const accessToken = (await cookieStore).get('access_token')?.value;
 
     const response = await fetch(`${RENDER_BACKEND_URL}/api/users/${userId}`, {
       method: 'PATCH', // Or 'PUT' depending on your API design
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `auth_token=${authToken}`,
+        'Cookie': `access_token=${accessToken}`,
       },
       body: JSON.stringify(payload),
     });
@@ -183,13 +183,13 @@ export async function createUser(previousState: CreateFormState, formData: FormD
 
   try {
     const cookieStore = cookies();
-    const authToken = (await cookieStore).get('auth_token')?.value;
+    const accessToken = (await cookieStore).get('access_token')?.value;
 
     const response = await fetch(`${RENDER_BACKEND_URL}/api/users`, {
       method: 'POST', // Or 'PUT' depending on your API design
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `auth_token=${authToken}`,
+        'Cookie': `access_token=${accessToken}`,
       },
       body: JSON.stringify(payload),
     });

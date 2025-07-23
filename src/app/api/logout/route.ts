@@ -2,10 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(req: NextRequest) {
   if (!RENDER_BACKEND_URL) {
     return NextResponse.json({ message: 'Lỗi server' }, { status: 500 });
+  }
+  const accessTokenCookie = req.cookies.get('access_token');
+  const accessToken = accessTokenCookie?.value;
+
+  if (!accessToken) {
+    return NextResponse.json({ message: 'Không tìm thấy token' }, { status: 401 });
   }
 
   try {
@@ -13,6 +18,10 @@ export async function POST(req: NextRequest) {
     // Phía backend có thể đưa access_token đang dùng vào black list
     await fetch(`${RENDER_BACKEND_URL}/api/auth/logout`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `access_token=${accessToken}`,
+      },      
     });
 
     // 2.Xóa cookies 'access_token' khỏi browser người dùng
