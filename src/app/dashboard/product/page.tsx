@@ -67,7 +67,7 @@ export default async function ProductTypePage() {
   //   { key: 'productTypeName', label: 'Tên loại sản phẩm' },
   // ];
   const productDisplayFields = [
-    { key: '_id', label: 'Id loại sản phẩm' },
+    { key: '_id', label: 'Id sản phẩm' },
     { key: 'productName', label: 'Tên sản phẩm' },
     { key: 'productDetail', label: 'Thông số sản phẩm' },
     { key: 'price', label: 'Giá'}
