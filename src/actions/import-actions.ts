@@ -9,7 +9,7 @@ type RegisterFormState = {
 };
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
-export async function registerUser(previousState: RegisterFormState, formData : FormData) {
+export async function registerImport(previousState: RegisterFormState, formData : FormData) {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
     const name = formData.get("name") as string;
@@ -49,18 +49,18 @@ type DeleteFormState = {
   success?: boolean,
 };
 
-export async function deleteUser(previousState: DeleteFormState, formData: FormData): Promise<DeleteFormState> {
+export async function deleteImport(previousState: DeleteFormState, formData: FormData): Promise<DeleteFormState> {
   const userId = formData.get('userId') as string;
 
   if (!userId) {
-    return { error: 'User ID is missing for deletion.' };
+    return { error: 'Import ID is missing for deletion.' };
   }
 
   try {
     const cookieStore = cookies();
     const accessToken = (await cookieStore).get('access_token')?.value; // Get your auth token from cookies
 
-    const response = await fetch(`${RENDER_BACKEND_URL}/api/users/${userId}`, {
+    const response = await fetch(`${RENDER_BACKEND_URL}/api/imports/${userId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -74,8 +74,8 @@ export async function deleteUser(previousState: DeleteFormState, formData: FormD
     }
 
     // Revalidate the path to refresh the user list after successful deletion
-    // This tells Next.js to refetch data for the /dashboard/account route on the next request
-    revalidatePath('/dashboard/account');
+    // This tells Next.js to refetch data for the /dashboard/import route on the next request
+    revalidatePath('/dashboard/import');
     return { success: true, error: undefined }; // Return an empty object for success
 
   } catch (error: unknown) {
@@ -93,7 +93,7 @@ type UpdateFormState = {
   // but revalidatePath will handle UI refresh.
 };
 
-export async function updateUser(previousState: UpdateFormState, formData: FormData): Promise<UpdateFormState> {
+export async function updateImport(previousState: UpdateFormState, formData: FormData): Promise<UpdateFormState> {
   const userId = formData.get('userId') as string;
   const name = formData.get('name') as string;
   const role = formData.get('role') as string;
@@ -123,7 +123,7 @@ export async function updateUser(previousState: UpdateFormState, formData: FormD
     const cookieStore = cookies();
     const accessToken = (await cookieStore).get('access_token')?.value;
 
-    const response = await fetch(`${RENDER_BACKEND_URL}/api/users/${userId}`, {
+    const response = await fetch(`${RENDER_BACKEND_URL}/api/imports/${userId}`, {
       method: 'PATCH', // Or 'PUT' depending on your API design
       headers: {
         'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ export async function updateUser(previousState: UpdateFormState, formData: FormD
     }
 
     // Revalidate the path to refresh the user list after successful update
-    revalidatePath('/dashboard/account');
+    revalidatePath('/dashboard/import');
 
     return { success: true }; // Indicate success
   } catch (error: unknown) {
@@ -148,44 +148,56 @@ export async function updateUser(previousState: UpdateFormState, formData: FormD
   }
 }
 
+type ImportDetail = {
+  productId: string;
+  amount: number;
+}
+
 type CreateFormState = {
   error?: string | null;
   success?: boolean | null;
-  username?: string | null;
-  password?: string | null;
-  name?: string | null;
-  role?: string | null;
+  deliverer?: string | null;
+  providerId?: string | null;
+  storageId?: string | null;
+  note?: string | null;
+  importDetails?: ImportDetail[];
 };
-export async function createUser(previousState: CreateFormState, formData: FormData): Promise<CreateFormState> {
-  const username = formData.get('username') as string;
-  const password = formData.get('password') as string;
-  const name = formData.get('name') as string;
-  const role = formData.get('role') as string;
-  // Note: Password update should ideally be a separate action for security
-  // or handled very carefully here (e.g., only if password field is explicitly provided and hashed)
+export async function createImport(previousState: CreateFormState, formData: FormData): Promise<CreateFormState> {
+  const deliverer = formData.get('deliverer') as string;
+  const providerId = formData.get('providerId') as string;
+  const storageId = formData.get('storageId') as string;
+  const note = formData.get('note') as string;
+  const rawImportDetails = formData.get('importDetails');
+
+  let parsedImportDetails;
+  try {
+    parsedImportDetails = rawImportDetails ? JSON.parse(rawImportDetails.toString()) : [];
+    if(!Array.isArray(parsedImportDetails))
+      parsedImportDetails = [];
+  }
+  catch (error){
+    console.log(error);
+    return {error: 'Dữ liệu chi tiết sản phẩm không hợp lệ', ...previousState};
+  }
 
   // Basic validation (enhance as needed)
-  if (!name || name.trim() === '') {
-    return { error: 'Tên không được để trống.', username, password, name, role };
-  }
-  const allowedRoles = ['admin', 'customer', 'staff']; // Match your Mongoose schema
-  if (!role || !allowedRoles.includes(role)) {
-    return { error: `Vai trò không hợp lệ. Chỉ chấp nhận: ${allowedRoles.join(', ')}.` , username, password, name, role};
+  if (!deliverer || deliverer.trim() === '') {
+    return { error: 'Tên không được để trống.', providerId, storageId, note };
   }
 
   const payload = {
-    name: name.trim(),
-    role: role,
-    username: username,
-    password: password,
-    // Add other fields you want to update
+    deliverer: deliverer.trim(),
+    providerId: providerId,
+    storageId: storageId,
+    note: note,
+    importDetails: parsedImportDetails,
   };
 
   try {
     const cookieStore = cookies();
     const accessToken = (await cookieStore).get('access_token')?.value;
 
-    const response = await fetch(`${RENDER_BACKEND_URL}/api/users`, {
+    const response = await fetch(`${RENDER_BACKEND_URL}/api/imports`, {
       method: 'POST', // Or 'PUT' depending on your API design
       headers: {
         'Content-Type': 'application/json',
@@ -196,16 +208,16 @@ export async function createUser(previousState: CreateFormState, formData: FormD
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.msg || 'Có lỗi xảy ra! Không thể tạo tài khoản');
+      throw new Error(errorData.msg || 'Có lỗi xảy ra! Không thể tạo phiếu nhập');
     }
 
     // Revalidate the path to refresh the user list after successful update
-    revalidatePath('/dashboard/account');
+    revalidatePath('/dashboard/import');
 
     return { success: true}; // Indicate success
   } catch (error: unknown) {
     if(error instanceof Error)
-      return { error: error.message, success: false, username, password, name, role};
-    return {error: 'Đã xảy ra lỗi khi tạo người dùng.', success: false, username, password, name, role};
+      return { error: error.message, success: false, deliverer, providerId, storageId, note};
+    return {error: 'Đã xảy ra lỗi khi tạo phiếu nhập.', success: false, deliverer, providerId, storageId, note};
   }
 }

@@ -2,51 +2,46 @@
 
 import React, { useActionState, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { BookPlus, XCircle, Save } from 'lucide-react'; // Icons for create, cancel, save
-import { createProductType } from '@/actions/productType-actions'; // Import the createUser server action
+import { Store, XCircle, Save } from 'lucide-react'; // Icons for create, cancel, save
+import { createStorage } from '@/actions/storage-actions'; // Import the createStorage server action
 
 // Define the initial state for the form
 const initialState = {
   error: "",
   success: false,
-  productTypeName: "",
+  storageName: "",
 };
 
-export default function CreateProductTypeButton() {
+export default function CreateStorageButton() {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  // useActionState for the createUser action
-  const [state, action, isCreating] = useActionState(createProductType, initialState);
-
-  // Ref to clear the form after successful submission
-
-  // Effect to handle create success/error and show toasts
+  const [state, action, isCreating] = useActionState(createStorage, initialState);
+  
   useEffect(() => {
     if (!isCreating) { // Only react when the action has finished
       if (state.success) {
-        toast.success('Tạo loại sản phẩm mới thành công!');
+        toast.success('Tạo kho mới thành công!');
         setShowCreateModal(false); // Close modal on success
       } else if (state.error) {
-        toast.error(`Lỗi tạo loại sản phẩm: ${state.error}`);
+        toast.error(`Lỗi tạo kho: ${state.error}`);
       }
     }
   }, [state, isCreating]); // Depend on the entire state object and its pending status
 
-  // --- Create User Modal ---
-  const CreateUserModal = () => (
+  const CreateStorageModal = () => (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-        <h3 className="text-lg font-semibold mb-4">Tạo loại sản phẩm mới</h3>
+        <h3 className="text-lg font-semibold mb-4">Tạo kho mới</h3>
         <form action={action}>
           <div className="mb-4">
-            <label htmlFor="create-productTypeName" className="block text-gray-700 text-sm font-bold mb-2">
-              Tên loại sản phẩm:
+            <label htmlFor="create-storageName" className="block text-gray-700 text-sm font-bold mb-2">
+              Tên kho:
             </label>
             <input
               type="text"
-              id="create-productTypeName"
-              name="productTypeName"
-              defaultValue={state.productTypeName || ''} // Pre-fill if error occurred
+              id="create-storageName"
+              name="storageName"
+              defaultValue={state.storageName || ''}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
@@ -84,7 +79,6 @@ export default function CreateProductTypeButton() {
       </div>
     </div>
   );
-  // --- End Create User Modal ---
 
   return (
     <>
@@ -92,10 +86,10 @@ export default function CreateProductTypeButton() {
         onClick={() => setShowCreateModal(true)}
         className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
       >
-        <BookPlus size={20} /> Tạo loại sản phẩm mới
+        <Store size={20} /> Tạo kho mới
       </button>
 
-      {showCreateModal && <CreateUserModal />}
+      {showCreateModal && <CreateStorageModal />}
     </>
   );
 }

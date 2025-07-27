@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },      
     });
 

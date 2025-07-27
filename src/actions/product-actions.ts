@@ -26,7 +26,7 @@ export async function deleteProduct(previousState: DeleteFormState, formData: Fo
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     });
 
@@ -85,7 +85,7 @@ export async function updateProduct(previousState: UpdateFormState, formData: Fo
       method: 'PATCH', // Or 'PUT' depending on your API design
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify(payload),
     });
@@ -149,7 +149,7 @@ export async function createProduct(previousState: CreateFormState, formData: Fo
       method: 'POST', // Or 'PUT' depending on your API design
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify(payload),
     });

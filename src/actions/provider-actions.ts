@@ -26,7 +26,7 @@ export async function deleteProvider(previousState: DeleteFormState, formData: F
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     });
 
@@ -78,7 +78,7 @@ export async function updateProvider(previousState: UpdateFormState, formData: F
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify(payload),
     });
@@ -128,7 +128,7 @@ export async function createProvider(previousState: CreateFormState, formData: F
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify(payload),
     });

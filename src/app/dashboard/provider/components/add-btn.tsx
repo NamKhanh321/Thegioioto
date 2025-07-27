@@ -2,7 +2,7 @@
 
 import React, { useActionState, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { UserPlus, XCircle, Save } from 'lucide-react'; // Icons for create, cancel, save
+import { HousePlus, XCircle, Save } from 'lucide-react'; // Icons for create, cancel, save
 import { createProvider } from '@/actions/provider-actions'; // Import the createUser server action
 
 // Define the initial state for the form
@@ -117,7 +117,7 @@ export default function CreateProviderButton() {
         onClick={() => setShowCreateModal(true)}
         className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
       >
-        <UserPlus size={20} /> Tạo nhà cung cấp mới
+        <HousePlus size={20} /> Tạo nhà cung cấp mới
       </button>
 
       {showCreateModal && <CreateUserModal />}

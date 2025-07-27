@@ -6,6 +6,11 @@ import ProductActionsWrapper from './components/updateAndDelete-wrapper';
 import ProductCard from '@/components/Card';
 import ProductAddWrapper from './components/add-btn-wrapper';
 import { cookies } from 'next/headers';
+
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Sản phẩm"
+}
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 
@@ -32,7 +37,7 @@ export default async function ProductTypePage() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       // cache: 'no-store',
     });

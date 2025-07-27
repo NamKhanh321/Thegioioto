@@ -5,9 +5,24 @@ import Image from 'next/image';
 import Link from 'next/link';
 import SearchForm from '@/app/(homepage)/components/search-form'; // Adjust path as needed
 import { Menu, X } from 'lucide-react'; // Using lucide-react for icons
+import { usePathname } from 'next/navigation';
+
+const navLinks = [
+  {name: "Bảng điều khiển", href:"/dashboard"},
+  {name: "Loại sản phẩm", href:"/dashboard/productType"},
+  {name: "Quản lý kho", href:"/dashboard/storage"},
+  {name: "Nhập kho", href:"/dashboard/import"},
+  {name: "Sản phẩm", href:"/dashboard/product"},
+  {name: "Nhà cung cấp", href:"/dashboard/provider"},
+  {name: "Đơn hàng", href:"/dashboard/order"},
+  {name: "Tài khoản", href:"/dashboard/account"},
+  {name: "Trang mua hàng", href:"/shopping"},
+]
 
 export default function ClientSidebar() {
   const [isOpen, setIsOpen] = useState(false); // State to manage sidebar visibility
+
+  const pathname = usePathname();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -72,96 +87,19 @@ export default function ClientSidebar() {
         </div>
         <nav className="flex-1 overflow-y-auto pb-4">
           <ul className="list-none m-0 p-0 flex flex-col items-start mx-2 gap-2">
-            <li className="relative group w-full">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (<li className="relative group w-full" key={link.name}>
               <Link
-                href="/dashboard/"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
+                href={link.href}
+                className={`${isActive && 'font-bold bg-gray-800'} block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600`}
                 onClick={closeSidebar} // Added onClick handler
               >
-                Bảng điều khiển
+                {link.name}
                 <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
               </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/dashboard/productType"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Loại sản phẩm
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/dashboard/storage"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Quản lý kho
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/dashboard/import"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Nhập kho
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/dashboard/product"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Sản phẩm
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/dashboard/provider"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Nhà cung cấp
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/dashboard/order"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Đơn hàng
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/dashboard/account"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Tài khoản
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
-            <li className="relative group w-full">
-              <Link
-                href="/shopping"
-                className="block w-full px-4 py-2 rounded transition-colors duration-200 hover:bg-blue-100 hover:text-blue-600"
-                onClick={closeSidebar} // Added onClick handler
-              >
-                Trang mua hàng
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-[width] duration-300 group-hover:w-full"></span>
-              </Link>
-            </li>
+            </li>);
+            })}
           </ul>
         </nav>
       </aside>

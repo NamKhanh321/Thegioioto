@@ -1,5 +1,8 @@
 
-//components
+import { Metadata } from "next";
+export const metadata : Metadata = {
+  title: "Giới thiệu"
+}
 
 export default function IntroducePage() {
   return (

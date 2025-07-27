@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     });
     const backendData = await backendRes.json();

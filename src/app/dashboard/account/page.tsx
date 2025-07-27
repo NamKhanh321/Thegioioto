@@ -6,6 +6,11 @@ import UserActions from '@/app/dashboard/account/components/updateAndDelete';
 import CreateUserButton from './components/add-btn';
 import { cookies } from 'next/headers';
 import UserCard from '@/components/Card';
+
+import { Metadata } from 'next';
+export const metadata : Metadata = {
+  title: "Tài khoản"
+}
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 
@@ -32,7 +37,7 @@ export default async function AccountPage() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       cache: 'no-store',
     });

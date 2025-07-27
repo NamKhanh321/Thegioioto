@@ -8,6 +8,11 @@ import CreateProductTypeButton from './components/add-btn';
 import { cookies } from 'next/headers';
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Loại sản phẩm"
+}
+
 
 // Assuming you have a types file for your User
 type ProductType = {
@@ -27,7 +32,7 @@ export default async function ProductTypePage() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       // cache: 'no-store',
     });

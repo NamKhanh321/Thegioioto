@@ -8,16 +8,20 @@ import CreateProviderButton from './components/add-btn';
 import { cookies } from 'next/headers';
 const RENDER_BACKEND_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Nhà cung cấp"
+}
 
 // Assuming you have a types file for your User
-type ProviderType = {
+type Provider = {
   _id: string;
   providerName: string;
   phone: string,
   address: string,
 };
 export default async function ProviderPage() {
-  let providerType : ProviderType[] = [];
+  let provider : Provider[] = [];
   let error: string | null = null;
 
   try {
@@ -29,7 +33,7 @@ export default async function ProviderPage() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       // cache: 'no-store',
     });
@@ -43,7 +47,7 @@ export default async function ProviderPage() {
 
     // const data = await response.json();
     // users = data.users; // Assuming your API returns { users: [...] }
-    providerType = await response.json();
+    provider = await response.json();
   } catch (err: unknown) {
     if(err instanceof Error)
       error = err.message;
@@ -51,7 +55,7 @@ export default async function ProviderPage() {
       error = "Không thể tải dữ liệu nhà cung cấp. Vui lòng thử lại sau.";
   }
 
-  const productDisplayFields = [
+  const providerDisplayFields = [
     { key: '_id', label: 'Id nhà cung cấp' },
     { key: 'providerName', label: 'Tên nhà cung cấp' },
     { key: 'phone', label: 'Số điện thoại'},
@@ -70,11 +74,11 @@ export default async function ProviderPage() {
       )}
       <CreateProviderButton />
 
-      {!providerType || providerType.length === 0 ? (
+      {!provider || provider.length === 0 ? (
         <p className="text-center text-gray-600">Không có dữ liệu nhà cung cấp nào.</p>
       ) : (
         <div className="flex flex-wrap rounded-lg shadow-md">
-            {providerType.map((data) => (<ProductCard title={data.providerName} key={data._id} data={data} displayFields={productDisplayFields}><ProviderActions provider={data}/></ProductCard>))}
+            {provider.map((data) => (<ProductCard title={data.providerName} key={data._id} data={data} displayFields={providerDisplayFields}><ProviderActions provider={data}/></ProductCard>))}
         </div>
       )}
     </div>

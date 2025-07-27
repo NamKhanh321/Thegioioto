@@ -1,5 +1,8 @@
 
-//components
+import { Metadata } from "next";
+export const metadata : Metadata = {
+  title: "Danh mục"
+}
 
 export default function CategoryPage() {
   return (

@@ -22,14 +22,14 @@ export default async function ProductAddWrapper() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       cache: 'no-store' // Ensure data is fresh
     });
 
     if (!productTypesRes.ok) {
       const errorData = await productTypesRes.json();
-      throw new Error(errorData.message || 'Không thể lấy dữ liệu loại sản phẩm');
+      throw new Error(errorData.msg || 'Không thể lấy dữ liệu loại sản phẩm');
     }
     productTypes = await productTypesRes.json();
 
@@ -38,14 +38,14 @@ export default async function ProductAddWrapper() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `access_token=${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       cache: 'no-store' // Ensure data is fresh
     });
 
     if (!providersRes.ok) {
       const errorData = await providersRes.json();
-      throw new Error(errorData.message || 'Không thể lấy dữ liệu nhà cung cấp');
+      throw new Error(errorData.msg || 'Không thể lấy dữ liệu nhà cung cấp');
     }
     providers = await providersRes.json();
 
