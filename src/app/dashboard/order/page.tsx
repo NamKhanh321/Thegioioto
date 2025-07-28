@@ -5,8 +5,8 @@ export const metadata: Metadata = {
 
 export default function orderPage() {
   return (
-      <>
-        <h1>Trang quản lý đơn hàng</h1>
-      </>
+    <div className="p-4">
+      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Trang quản lý đơn hàng</h1>
+      </div>
   );
 }

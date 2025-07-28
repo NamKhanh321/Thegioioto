@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const accessToken = accessTokenCookie?.value;
 
   if (!accessToken) {
-    return NextResponse.json({ message: 'Không tìm thấy token' }, { status: 401 });
+    return NextResponse.json({ message: 'Không tìm thấy token' }, { status: 404 });
   }
 
   try {
