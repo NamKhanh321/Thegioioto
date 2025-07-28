@@ -8,11 +8,10 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 
-import Header from '@/components/Header';
+// import Header from '@/components/Header';
 
-import { AuthProvider } from "./contexts/AuthContext";
-import {Suspense} from 'react';
-// import Footer from '@/components/Footer';
+// import { AuthProvider } from "./contexts/AuthContext";
+// import {Suspense} from 'react';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,12 +39,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-200`}
       >
         <div className="flex flex-col min-h-screen mx-auto bg-white text-sm">
-          <Suspense fallback={<div>Loading content...</div>}>
+          {children}
+          {/* <Suspense fallback={<div>Loading content...</div>}>
             <AuthProvider>
               <Header />
               {children}
             </AuthProvider>
-          </Suspense>
+          </Suspense> */}
           <Toaster
           position="top-center" // You can choose 'top-right', 'bottom-center', etc.
           reverseOrder={false}

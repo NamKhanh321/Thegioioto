@@ -75,9 +75,9 @@ export default function LoginForm() {
                 {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </button>
             <div className="mt-4">Chưa có tài khoản? <Link href="/register" className="text-blue-500 hover:text-blue-700 transition-colors duration-200">Đăng ký ngay</Link></div>
-            {error && (
-                <p className="text-red-600 text-center mt-2">{error}</p>
-            )}
+            <p className={`text-red-600 text-center mt-2 ${error ? 'visible' : 'invisible h-0'}`}>
+                {error}
+            </p>
         </form>
     );
 }
